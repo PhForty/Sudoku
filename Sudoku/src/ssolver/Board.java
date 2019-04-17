@@ -1,6 +1,7 @@
 package ssolver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -188,7 +189,8 @@ public class Board {
 		}
 	}
 
-	// TODO automatically creates a full new board
+	//TODO funktioniert nicht, muss rekursiv aufgerufen werden, da es passieren kann, 
+	//das es sich selbst zubaut...
 	public void newBoardAutoFull() {
 		// STEP 0: fill 3 independent squares (top left, middle and bottom right) at random
 		// STEP 1: Repeat 1 and 2 9x (for every single number)
@@ -245,7 +247,6 @@ public class Board {
 		for (int i = 1; i < 10; i++) {
 			//STEP2
 			logic l = new logic();
-			//TODO manually repeat it for every square
 				//STEP3
 				//STEP4
 				//traverse through square, save every solution as coordinates in list
@@ -253,133 +254,72 @@ public class Board {
 				String coordinates;
 				int locationIndex;
 				String temp;
-				//for top middle square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+				for(int h = 0; h<6; h++) {
+					//above switch
+					l.fSColumns(this);
+					l.fSRows(this);
+					for(int o = 0; o<3; o++) {
+						for(int p = 0; p<3; p++) {
+					//switch
+					switch(h) {
+					case 0:
+						//top middle square
 						if(this.completeBoard[3+o][0+p].contains(Integer.toString(i))&& this.completeBoard[3+o][0+p].charAt(0)=='0') {
 							coordinates = Integer.toString((3+o))+Integer.toString((0+p));
 							pool.add(coordinates);
 						}
-					}
-				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-					locationIndex = rand.nextInt(pool.size()-1);
-					temp = pool.get(locationIndex);
-					this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-					} else {
-						this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-					}
-				//empty pool for next use
-				pool.clear();
-				//for top right square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+						break;
+					case 1:
+						//top right square
 						if(this.completeBoard[6+o][0+p].contains(Integer.toString(i))&& this.completeBoard[6+o][0+p].charAt(0)=='0') {
 							coordinates = Integer.toString((6+o))+Integer.toString((0+p));
 							pool.add(coordinates);
 						}
-					}
-				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-					locationIndex = rand.nextInt(pool.size()-1);
-					temp = pool.get(locationIndex);
-					this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-					} else {
-						this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-					}
-				//empty pool for next use
-				pool.clear();
-				//for middle left square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+						break;
+					case 2:
+						//middle left square
 						if(this.completeBoard[0+o][3+p].contains(Integer.toString(i))&& this.completeBoard[0+o][3+p].charAt(0)=='0') {
 							coordinates = Integer.toString((0+o))+Integer.toString((3+p));
 							pool.add(coordinates);
 						}
-					}
-				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-					locationIndex = rand.nextInt(pool.size()-1);
-					temp = pool.get(locationIndex);
-					this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-					} else {
-						this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-				}
-				//empty pool for next use
-				pool.clear();
-				//for middle right square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+						break;
+					case 3:
+						//middle right square
 						if(this.completeBoard[6+o][3+p].contains(Integer.toString(i))&& this.completeBoard[6+o][3+p].charAt(0)=='0') {
 							coordinates = Integer.toString((6+o))+Integer.toString((3+p));
 							pool.add(coordinates);
 						}
-					}
-				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-				locationIndex = rand.nextInt(pool.size()-1);
-				temp = pool.get(locationIndex);
-				this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-				} else {
-					this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-				}
-				//empty pool for next use
-				pool.clear();
-				//for bottom left square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+						break;
+					case 4:
+						//bottom left square
 						if(this.completeBoard[0+o][6+p].contains(Integer.toString(i))&& this.completeBoard[0+o][6+p].charAt(0)=='0') {
 							coordinates = Integer.toString((0+o))+Integer.toString((6+p));
 							pool.add(coordinates);
 						}
-					}
-				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-					locationIndex = rand.nextInt(pool.size()-1);
-					temp = pool.get(locationIndex);
-					this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-					} else {
-						this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-					}
-				//empty pool for next use
-				pool.clear();
-				//for bottom middle square
-				l.fSColumns(this);
-				l.fSRows(this);
-				for(int o = 0; o<3; o++) {
-					for(int p = 0; p<3; p++) {
+						break;
+					case 5:
+						//bottom middle square
 						if(this.completeBoard[3+o][6+p].contains(Integer.toString(i)) && this.completeBoard[3+o][6+p].charAt(0)=='0') {
 							coordinates = Integer.toString((3+o))+Integer.toString((6+p));
 							pool.add(coordinates);
 						}
+						break;
 					}
+					//below switch
+						}
+					}
+					if(pool.size()>1) {
+						locationIndex = rand.nextInt(pool.size()-1);
+						temp = pool.get(locationIndex);
+						this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
+						} 
+						else if(pool.size()==1){
+							this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
+						}
+					pool.clear();
 				}
-				//pick random number, fill i in that field
-				if(pool.size()>1) {
-					locationIndex = rand.nextInt(pool.size()-1);
-					temp = pool.get(locationIndex);
-					this.completeBoard[Integer.parseInt(temp.substring(0,1))][Integer.parseInt(temp.substring(1,2))]=Integer.toString(i);
-					} else {
-						this.completeBoard[Integer.parseInt(pool.get(0).substring(0, 1))][Integer.parseInt(pool.get(0).substring(1, 2))]=Integer.toString(i);
-					}
-				//empty pool for next use
-				pool.clear();
-		printBoard();
+//				printBoard();
+//				System.out.println("////////////////////////");
 		}
 		
 

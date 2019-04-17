@@ -22,8 +22,8 @@ public class logic {
 			findSolutions(board);
 			//writes the ones down, that are 100% likely, returns whether anything could be done
 			endless = !fillSolutionsGood(board);
-//			board.printBoard();
-//			System.out.println("///////////////////////////////");
+			board.printBoard();
+			System.out.println("///////////////////////////////");
 			//if fillSolutions returned "false", it means that nothing was changed, therefore resulting in an endless board
 			if(endless) {
 				isSolved = false;
@@ -174,7 +174,7 @@ public class logic {
 	public boolean fillSolutionsGood(Board tempBoard) {
 		boolean anythingChanged = false;
 		//if any "helper" method filled something in, anything has changed
-		//i cant do all three at once, it makes the solution wrong. Just one at a time
+		//i can't do all three at once, it makes the solution wrong. Just one at a time
 		if(fillSCGood(tempBoard)) {
 			anythingChanged = true;
 		} else if(fillSRGood(tempBoard)) {
@@ -249,9 +249,7 @@ public class logic {
 					//repeat the same for the rows
 					for(int i = 0; i<9; i++) {
 						//go through every column character (start with 1, because first isnt possible solution)
-						//TODO Error: If-statement should be uncommented, but it does produce weird results then
 						if(tempBoard.completeBoard[j][i].charAt(0) == '0') {
-							System.out.println("i: "+i + "charAt(0): "+tempBoard.completeBoard[j][i].charAt(0));
 							for(int k = 1; k<tempBoard.completeBoard[j][i].length(); k++) {
 								//if number didn't appear up until now:
 								if(distinctNum[Character.getNumericValue(tempBoard.completeBoard[j][i].charAt(k))-1] == 0) {
@@ -273,14 +271,10 @@ public class logic {
 								if(distinctNum[dN] >= 1 && tempBoard.completeBoard[j][i].contains(Integer.toString(distinctNum[dN]))) {
 									tempBoard.completeBoard[j][i] = Integer.toString(distinctNum[dN]);
 									anythingChanged = true;
-								}//TODO the three lines below should be commented out, but as above: very weird results 
-//								else {
-//									tempBoard.completeBoard[j][i] = Character.toString(tempBoard.completeBoard[j][i].charAt(0));
-//								}
+								}
 							}
 						}
 					}
-					System.out.println(Arrays.toString(distinctNum));
 				}
 				return anythingChanged;
 	}
@@ -324,7 +318,6 @@ public class logic {
 									for(int dN = 0; dN<9; dN++) {
 										//write number if it is unique and appears in the current cell
 										if(distinctNum[dN] >= 1 && tempBoard.completeBoard[i*3+x][j*3+y].contains(Integer.toString(distinctNum[dN]))&& tempBoard.completeBoard[i*3+x][j*3+y].charAt(0)=='0') {
-											System.out.println("Lösung Square: "+ Integer.toString(distinctNum[dN]));
 											tempBoard.completeBoard[i*3+x][j*3+y] = Integer.toString(distinctNum[dN]);
 											anythingChanged = true;
 										} //else {
