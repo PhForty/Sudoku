@@ -1,5 +1,7 @@
 package ssolver;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -159,33 +161,38 @@ public class Board {
 	}
 
 	// makes a new board, based on user input via console
-	public void newBoardManual() {
-		clear();
-		Scanner sc = new Scanner(System.in);
-		String nextRow;
-		for (int i = 0; i < 9; i++) {
-			System.out.println("Bitte die Zeile " + (i + 1) + " eingeben (z.B.: 010450007)");
-			nextRow = sc.nextLine();
-			while (syntaxFlaws(nextRow)) {
-				System.out.println("ERROR: Zeile " + (i + 1) + " fehlerhaft. Bitte wiederholen.");
-				nextRow = sc.nextLine();
-			}
-			// writes given line in array
-			for (int j = 0; j < 9; j++) {
-				completeBoard[i][j] = Character.toString(nextRow.charAt(j));
-			}
+	public void newBoardManual(BufferedReader sc) {
+		try {
+			clear();
+			
+			String nextRow;
+			for (int i = 0; i < 9; i++) {
+				System.out.println("Bitte die Zeile " + (i + 1) + " eingeben (z.B.: 010450007)");
+				nextRow = sc.readLine();
+				
+				while (syntaxFlaws(nextRow)) {
+					System.out.println("ERROR: Zeile " + (i + 1) + " fehlerhaft. Bitte wiederholen.");
+					nextRow = sc.readLine();
+				}
+				// writes given line in array
+				for (int j = 0; j < 9; j++) {
+					completeBoard[i][j] = Character.toString(nextRow.charAt(j));
+				}
 
-		}
-		System.out.println("Das eingegebene Board sieht so aus:");
-		printBoard();
-		System.out.println("Wollen Sie ein anderes Board eingeben? (y/n)");
-		String answer = sc.nextLine();
-		if (answer.equals("y")) {
-			System.out.println("Das Board wird überschrieben.");
-			newBoardManual();
-		} else {
-			System.out.println("Das Board wurde gespeichert.");
-			sc.close();
+			}
+			System.out.println("Das eingegebene Board sieht so aus:");
+			printBoard();
+			System.out.println("Wollen Sie ein anderes Board eingeben? (y/n)");
+			String answer = sc.readLine();
+			if (answer.equals("y")) {
+				System.out.println("Das Board wird überschrieben.");
+				newBoardManual(sc);
+			} else {
+				System.out.println("Das Board wurde gespeichert.");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
