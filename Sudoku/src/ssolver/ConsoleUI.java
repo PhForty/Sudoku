@@ -21,18 +21,17 @@ public class ConsoleUI {
 		System.out.println("(3): Exit");
 		InputStreamReader r = new InputStreamReader(System.in);    
 		BufferedReader sc = new BufferedReader(r);
-		int nextRow;
+		String nextRow;
 		try {
-			//nextRow is the ASCII-value of 1/2/3!
-			nextRow = sc.read();
-			sc.readLine();
+			nextRow = sc.readLine();
 		} catch (IOException e) {
 			//e.printStackTrace();
 			System.out.println("error with input (try/catch");
-			nextRow = 0;
+			nextRow = "0";
 		}
-		switch(nextRow) {
-		case 49:
+		switch(nextRow.toLowerCase()) {
+		case "eins":
+		case "1":
 			board.newBoardManual(sc);
 			board.printBoard();
 			System.out.println("///////////////////////////////");
@@ -52,15 +51,18 @@ public class ConsoleUI {
 			System.out.println("It took "+ (end-start)/1000 + "s and " + l.iterationCounter + " iterations, to come to this point:");
 			board.printBoard();
 			break;
-		case 50:
+		case "zwei":
+		case "2":
 			board.newBoardAutoFull();
 			board.printBoard();
 			break;
-		case 51:
+		case "drei":
+		case "3":
 			System.out.println("Bye");
 			System.exit(0);
 			break;
-//		case 52:
+//		case "vier":
+//		case "4":
 //			String testString = "Geheime Option 4!";
 //			System.out.println(testString);
 //			int k = 4;
@@ -68,7 +70,7 @@ public class ConsoleUI {
 //			System.out.println(testString);
 //			break;
 		default:
-			System.out.println("Invalid Input");
+			System.out.println("Fehler, bitte erneut wählen");
 			break;		
 		}
 		}
