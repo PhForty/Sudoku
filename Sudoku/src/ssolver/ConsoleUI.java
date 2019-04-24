@@ -53,17 +53,7 @@ public class ConsoleUI {
 			board.printBoard();
 			break;
 		case 50:
-			boolean repeat = true;
-			boolean valid;
-			Logic lo = new Logic();
-			do {
 			board.newBoardAutoFull();
-			//if it is solvable it is complete/valid
-			valid = lo.solve(board);
-			if(valid&&board.isCorrect()) {
-				repeat = false;
-			}
-			}while(repeat);
 			board.printBoard();
 			break;
 		case 51:

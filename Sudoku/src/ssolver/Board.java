@@ -248,8 +248,13 @@ public class Board {
 			}
 			done = false;
 		}
-		System.out.println("done");
+		
 		// STEP1
+		Logic lo = new Logic();
+		boolean repeat = true;
+		boolean valid;
+		
+		while(repeat) {
 		for (int i = 1; i < 10; i++) {
 			//STEP2
 			Logic l = new Logic();
@@ -326,6 +331,12 @@ public class Board {
 				}
 //				printBoard();
 //				System.out.println("////////////////////////");
+		}
+		//needed, so this repeats itself until a valid solution appears
+		valid = lo.solve(this);
+		if(valid&&this.isCorrect()) {
+			repeat = false;
+		}
 		}
 		
 
