@@ -1,8 +1,10 @@
 package ssolver;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
-public class logic {
+public class Logic {
 	//the youtube channel "Cracking the Cryptic" provides good content
 	//future addition: https://www.youtube.com/watch?v=4GVyBiFUNws (min 3:00 onwards, "pairs", seems important for hard ones)
 		//the information they give can be considered "safe solution" (they are clear to the outside, just not to themselves)
@@ -20,8 +22,9 @@ public class logic {
 			iterationCounter++;
 			//finds all possible solutions
 			findSolutions(board);
+			candidateLines(board);
 			//writes the ones down, that are 100% likely, returns whether anything could be done
-			endless = !fillSolutionsGood(board);
+			endless = !fillSolutionsDefinite(board);
 			board.printBoard();
 			System.out.println("///////////////////////////////");
 			//if fillSolutions returned "false", it means that nothing was changed, therefore resulting in an endless board
@@ -33,6 +36,128 @@ public class logic {
 		return isSolved;
 	}
 	
+	public void candidateLines(Board tempBoard) {
+		//for testing: Strg+7 from Macro!
+		//input: board with all possibles solutions filled in
+		//output: same board, minus the solutions that can be ruled out cause of candidateLines
+		//Step0: repeat all steps for every square
+			//Step1: count the amount of the appearance of every possible solution in the square
+			//Step2: for every solution that appears 2-3 times:
+				//Step3: find the coordinates and check whether they all appear on the same row or column
+				//Step4: if they all appear on the same row/column: go through all other fields of that row/column and delete all other appearances of that number
+		int[] appearanceRate = new int[9];
+		//Step0
+		for(int i = 0; i<3; i++) {
+			for(int j = 0; j<3; j++) {
+		//Step1
+				//empty appearanceArray
+				for(int k = 0; k<9; k++) {
+					appearanceRate[k] = 0;
+				}
+				//traverse square within
+				for(int x = 0; x<3; x++) {
+					for(int y = 0; y<3; y++) {
+						//for every field: go through string and increase number in appearanceArray
+						for(int k = 1; k<tempBoard.completeBoard[i*3+x][j*3+y].length(); k++) {
+							if(tempBoard.completeBoard[i*3+x][j*3+y].charAt(0)=='0') {
+								appearanceRate[Character.getNumericValue(tempBoard.completeBoard[i*3+x][j*3+y].charAt(k))-1]++;
+							}
+						}
+					}
+				}
+		//Step2
+		//traverse appearanceArray: if solution appears 2-3 times: do step 3 and 4
+				ArrayList<String> coordinates = new ArrayList<String>();
+				for (int k = 1; k < 10; k++) {
+					// delete any previous coordinates
+					coordinates.clear();
+					if (appearanceRate[k - 1] == 2 || appearanceRate[k - 1] == 3) {
+						// Step3
+						/* traverse square */
+						for (int x = 0; x < 3; x++) {
+							for (int y = 0; y < 3; y++) {
+								// if current number appears: safe coordinates
+								if (tempBoard.completeBoard[i * 3 + x][j * 3 + y].contains(Integer.toString((k))) && tempBoard.completeBoard[i * 3 + x][j * 3 + y].charAt(0)=='0') {
+									coordinates.add((Integer.toString(i * 3 + x) + Integer.toString(j * 3 + y)));
+								}
+							}
+						}
+						/* compare coordinates: are all rows the same or all columns */
+						boolean sameRow = false;
+						boolean sameColumn = false;
+						int rowCoordinate;
+						int columnCoordinate;
+
+						/* first list element: set row and column to the value */
+						columnCoordinate = Character.getNumericValue(coordinates.get(0).charAt(0));
+						rowCoordinate = Character.getNumericValue(coordinates.get(0).charAt(1));
+						/* second list element: compare, if same: change boolean */
+						if (columnCoordinate == Character.getNumericValue(coordinates.get(1).charAt(0))) {
+							sameColumn = true;
+						} else if (rowCoordinate == Character.getNumericValue(coordinates.get(1).charAt(1))) {
+							sameRow = true;
+						}
+						/*
+						 * check if third element exists: if yes: check for the one where boolean(true):
+						 * does it match the int? if not: set it false
+						 */
+						if (coordinates.size() == 3) {
+							if (sameColumn) {
+								if (columnCoordinate != Character.getNumericValue(coordinates.get(2).charAt(0))) {
+									sameColumn = false;
+								}
+							} else if (sameRow) {
+								if (rowCoordinate != Character.getNumericValue(coordinates.get(2).charAt(1))) {
+									sameRow = false;
+								}
+							}
+						}
+						// Step4
+						/* depending on result of step3: */
+						// column: not for i, i+1 and i+2
+						// row: not for j, j+1 and j+2
+						if (sameColumn) {
+							/* traverse the row/column and if .contains(), delete it with .replace() */
+							for (int a = 0; a < 9; a++) {							
+								if (tempBoard.completeBoard[columnCoordinate][a].substring(1).contains(Integer.toString(k)) && tempBoard.completeBoard[columnCoordinate][a].charAt(0) == '0') {
+									//if a is equal to any of the row coordinates saved, it should be ignored
+									boolean notCurrentCoordinates = true;
+									for(int b = 0; b<coordinates.size(); b++) {
+										if(a==Character.getNumericValue(coordinates.get(b).charAt(1))) {
+											notCurrentCoordinates = false;
+											break;
+										}
+									}
+									//bei sameRow: a ungleich den ersten Koordinaten
+									//bei sameColumn: a ungleich den zweiten Koordinaten
+									if(notCurrentCoordinates) {
+										tempBoard.completeBoard[columnCoordinate][a] = tempBoard.completeBoard[columnCoordinate][a].replace(Integer.toString(k), "");
+									}
+								}
+							}
+						} else if (sameRow) {
+							/* traverse the row/column and if .contains(), delete it with .replace() */
+							for (int a = 0; a < 9; a++) {
+								if (tempBoard.completeBoard[a][rowCoordinate].substring(1).contains(Integer.toString(k))&& tempBoard.completeBoard[a][rowCoordinate].charAt(0) == '0') {
+									boolean notCurrentCoordinates = true;
+									for(int b = 0; b<coordinates.size(); b++) {
+										if(a==Character.getNumericValue(coordinates.get(b).charAt(0))) {
+											notCurrentCoordinates = false;
+											break;
+										}
+									}
+									if(notCurrentCoordinates) {
+										tempBoard.completeBoard[a][rowCoordinate] = tempBoard.completeBoard[a][rowCoordinate].replace(Integer.toString(k), "");
+									}
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+	}
 	public void findSolutions(Board tempBoard) {
 		fSColumns(tempBoard);
 		fSRows(tempBoard);
@@ -171,21 +296,21 @@ public class logic {
 	}
 	//writes all save solutions (those where only one possible solutions exists/ it is explicit) in the board
 	//returns whether anything has been done (to prevent infinite loops)
-	public boolean fillSolutionsGood(Board tempBoard) {
+	public boolean fillSolutionsDefinite(Board tempBoard) {
 		boolean anythingChanged = false;
 		//if any "helper" method filled something in, anything has changed
 		//i can't do all three at once, it makes the solution wrong. Just one at a time
-		if(fillSCGood(tempBoard)) {
+		if(fillSCDefinite(tempBoard)) {
 			anythingChanged = true;
-		} else if(fillSRGood(tempBoard)) {
+		} else if(fillSRDefinite(tempBoard)) {
 			anythingChanged = true;
-		} else if(fillSSGood(tempBoard)) {
+		} else if(fillSSDefinite(tempBoard)) {
 			anythingChanged = true;
 		}
 		return anythingChanged;
 	}
 	//fill Solutions Columns for "Good"
-	public boolean fillSCGood(Board tempBoard) {
+	public boolean fillSCDefinite(Board tempBoard) {
 		boolean anythingChanged = false;
 		Integer[] distinctNum = new Integer[9];
 		
@@ -235,7 +360,7 @@ public class logic {
 	}
 	
 	//fill Solutions Rows for "Good"
-	public boolean fillSRGood(Board tempBoard) {
+	public boolean fillSRDefinite(Board tempBoard) {
 		boolean anythingChanged = false;
 		Integer[] distinctNum = new Integer[9];
 		//traverse rows
@@ -280,7 +405,7 @@ public class logic {
 	}
 	
 	//fill Solutions Squares for "Good"
-	public boolean fillSSGood(Board tempBoard) {
+	public boolean fillSSDefinite(Board tempBoard) {
 		boolean anythingChanged = false;
 		Integer[] distinctNum = new Integer[9];
 		//traverse squares

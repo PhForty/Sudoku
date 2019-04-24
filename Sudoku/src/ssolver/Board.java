@@ -191,7 +191,6 @@ public class Board {
 				System.out.println("Das Board wurde gespeichert.");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -253,7 +252,7 @@ public class Board {
 		// STEP1
 		for (int i = 1; i < 10; i++) {
 			//STEP2
-			logic l = new logic();
+			Logic l = new Logic();
 				//STEP3
 				//STEP4
 				//traverse through square, save every solution as coordinates in list

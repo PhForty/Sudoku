@@ -33,11 +33,11 @@ public class ConsoleUI {
 		}
 		switch(nextRow) {
 		case 49:
-			//TODO this method is the problem why the menu loops
 			board.newBoardManual(sc);
 			board.printBoard();
+			System.out.println("///////////////////////////////");
 			double start = System.currentTimeMillis();
-			logic l = new logic();
+			Logic l = new Logic();
 			boolean solved = l.solve(board);
 			double end = System.currentTimeMillis();
 			
@@ -55,7 +55,7 @@ public class ConsoleUI {
 		case 50:
 			boolean repeat = true;
 			boolean valid;
-			logic lo = new logic();
+			Logic lo = new Logic();
 			do {
 			board.newBoardAutoFull();
 			//if it is solvable it is complete/valid
@@ -71,8 +71,11 @@ public class ConsoleUI {
 			System.exit(0);
 			break;
 //		case 52:
-//			System.out.println("Geheime Option 4!");
-//			testInputMethod(sc);
+//			String testString = "Geheime Option 4!";
+//			System.out.println(testString);
+//			int k = 4;
+//			testString = testString.replace(Integer.toString(k), "");
+//			System.out.println(testString);
 //			break;
 		default:
 			System.out.println("Invalid Input");
