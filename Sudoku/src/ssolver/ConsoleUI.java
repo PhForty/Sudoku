@@ -41,13 +41,13 @@ public class ConsoleUI {
 			
 			//prints the final status (and technical details)
 			if(solved && board.isCorrect()) {
-				System.out.println("The board is solved:");
+				System.out.println("Das Sudoku wurde gelöst:");
 			} else if (!solved && board.isCorrect()){
-				System.out.println("I can only solve the board so far. For now, this is to hard");
+				System.out.println("Ich kann das Sudoku nur soweit lösen. Es ist für mich momentan zu schwer.");
 			} else if (!board.isCorrect()) {
-				System.out.println("ERROR, i've made a mistake.");	
+				System.out.println("Fehler, irgendwas lief schief.");	
 			}
-			System.out.println("It took "+ (end-start)/1000 + "s and " + l.iterationCounter + " iterations:");
+			System.out.println("Es hat "+ (end-start)/1000 + "s und " + l.iterationCounter + " Iterationen gebraucht:");
 			board.printBoard();
 			System.out.println("///////////////////////////////");
 			break;
