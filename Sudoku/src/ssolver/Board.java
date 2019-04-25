@@ -161,7 +161,7 @@ public class Board {
 	}
 
 	// makes a new board, based on user input via console
-	public void newBoardManual(BufferedReader sc) {
+	public boolean newBoardManual(BufferedReader sc) {
 		try {
 			clear();
 			
@@ -182,16 +182,16 @@ public class Board {
 			}
 			System.out.println("Das eingegebene Board sieht so aus:");
 			printBoard();
-			System.out.println("Wollen Sie ein anderes Board eingeben? (y/n)");
+			System.out.println("Wollen sie den Lösungsweg sehen? (j/n)");
 			String answer = sc.readLine();
-			if (answer.equals("y")) {
-				System.out.println("Das Board wird überschrieben.");
-				newBoardManual(sc);
+			if (answer.equals("y")||answer.equals("j")) {
+				return true;
 			} else {
-				System.out.println("Das Board wurde gespeichert.");
+				return false;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -333,7 +333,7 @@ public class Board {
 //				System.out.println("////////////////////////");
 		}
 		//needed, so this repeats itself until a valid solution appears
-		valid = lo.solve(this);
+		valid = lo.solve(this, false);
 		if(valid&&this.isCorrect()) {
 			repeat = false;
 		}

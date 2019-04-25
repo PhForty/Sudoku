@@ -30,14 +30,13 @@ public class ConsoleUI {
 			nextRow = "0";
 		}
 		switch(nextRow.toLowerCase()) {
+		case "one":
 		case "eins":
 		case "1":
-			board.newBoardManual(sc);
-			board.printBoard();
-			System.out.println("///////////////////////////////");
+			boolean solutionPath = board.newBoardManual(sc);
 			double start = System.currentTimeMillis();
 			Logic l = new Logic();
-			boolean solved = l.solve(board);
+			boolean solved = l.solve(board, solutionPath);
 			double end = System.currentTimeMillis();
 			
 			//prints the final status (and technical details)
@@ -48,19 +47,25 @@ public class ConsoleUI {
 			} else if (!board.isCorrect()) {
 				System.out.println("ERROR, i've made a mistake.");	
 			}
-			System.out.println("It took "+ (end-start)/1000 + "s and " + l.iterationCounter + " iterations, to come to this point:");
+			System.out.println("It took "+ (end-start)/1000 + "s and " + l.iterationCounter + " iterations:");
 			board.printBoard();
+			System.out.println("///////////////////////////////");
 			break;
+		case "two":
 		case "zwei":
 		case "2":
-			board.newBoardAutoFull();
-			board.printBoard();
+			System.out.println("Diese Option ist zurzeit gesperrt, da sie extrem lange braucht.");
+//			board.newBoardAutoFull();
+//			board.printBoard();
+			System.out.println("///////////////////////////////");
 			break;
+		case "three":
 		case "drei":
 		case "3":
 			System.out.println("Bye");
 			System.exit(0);
 			break;
+//		case "four":
 //		case "vier":
 //		case "4":
 //			String testString = "Geheime Option 4!";

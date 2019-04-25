@@ -14,7 +14,7 @@ public class Logic {
 	//x-wing
 	boolean endless;
 	int iterationCounter = 0;
-	public boolean solve(Board board) {
+	public boolean solve(Board board, boolean solutionPath) {
 		//as long as the board is not done, the algorithm continues iterative
 		boolean isSolved = true;
 		endless = false;
@@ -25,8 +25,10 @@ public class Logic {
 			candidateLines(board);
 			//writes the ones down, that are 100% likely, returns whether anything could be done
 			endless = !fillSolutionsDefinite(board);
-			board.printBoard();
-			System.out.println("///////////////////////////////");
+			if(solutionPath) {
+				board.printBoard();
+				System.out.println("///////////////////////////////");
+			}
 			//if fillSolutions returned "false", it means that nothing was changed, therefore resulting in an endless board
 			if(endless) {
 				isSolved = false;
